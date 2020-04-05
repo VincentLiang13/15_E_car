@@ -54,8 +54,8 @@
 #include "ANO_DT.h"
   
 /* 在OLED 上显示或者在TFT1.8显示 */
-//#define LQ_OLED     
-#define LQ_TFT1_8       
+#define LQ_OLED     
+//#define LQ_TFT1_8       
 /*自定义*/
 #include "Speed.h"
 #include "Direction.h"

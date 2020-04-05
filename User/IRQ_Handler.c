@@ -85,7 +85,7 @@ void PIT0_IRQHandler()
     if(pidcalcms*4 < s_pid.Tsam )  return;//此处考虑抢断优先级的顺序20ms时？？？？
     //功能实现部分
     
-    DirectionPartitionPwmOut();
+    //DirectionPartitionPwmOut();
     SpeedPartitionPwmOut();
     
     PWMOut();
@@ -104,7 +104,7 @@ void PIT1_IRQHandler()
 {
     PIT_Flag_Clear(PIT1);       //清中断标志位
     
-    DirectionPartitionPwmOut();
+    //DirectionPartitionPwmOut();
     PWMOut();
     
     pidcalcms++;

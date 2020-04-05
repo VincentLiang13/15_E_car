@@ -34,7 +34,7 @@ SCK             PTC16
 SDA             PTC15
 RST             PTC14
 DC              PTC13
-CS              PTC12                        
+CS              PTC12 
 -------------------------------------------------------------
 ******************************************************************************************************/
 
@@ -51,11 +51,12 @@ void main(void)
 	* 3: 8个抢占优先级 2个子优先级 4: 16个抢占优先级 0个子优先级
 	*/
 	/* 配置优先级组 2: 4个抢占优先级 4个子优先级 */
-    NVIC_SetPriorityGrouping(0x07 - 2);     
+    NVIC_SetPriorityGrouping(0x07 - 2); 
 
     LED_Init();
     KEY_Init();
     UART_Init(UART4, 115200);
+    OLED_Init();
     
     ADC_Init(ADC0);
     ADC_Init(ADC1);
@@ -67,12 +68,13 @@ void main(void)
     
     FTM_ABInit(FTM1);
     FTM_ABInit(FTM2);
+    
+    SpeeedPID_Init();  
 
-    OLED_Init();
     OLED_P8x16Str(5,0,(uint8_t*)"Go for it!"); 
-    delayms(2000);    
+    delayms(3000);    
     OLED_CLS();
-	    
+    
     PIT_Init_PID();
 //------------------------------------------------------------------------------------------------    
 //测试ADC端口  检测电压打印并显示 在include.h 宏定义选择OLED或TFT1.8  
@@ -83,5 +85,5 @@ void main(void)
    // EnableInterrupts; 
     
     ParamOut();
-    
+
 }

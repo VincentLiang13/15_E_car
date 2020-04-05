@@ -6,14 +6,14 @@
 int32 LeftDead = 0;  //???????? 10-15%
 int32 RighDead = 0;  //????????
 int32 g_nLeftpulse = 0, g_nRighpulse = 0;
-float Ratio_Encoder_Left = 207/(512*0.02);// 左轮速度=counter*左轮周长(mm)/(左轮转一圈对应的脉冲数*程序周期)
-float Ratio_Encoder_Righ = 207/(512*0.02);// 右轮速度=counter*右轮周长(mm)/(右轮转一圈对应的脉冲数*程序周期)
+//float Ratio_Encoder_Left = 207/(512*0.02);// 左轮速度=counter*左轮周长(mm)/(左轮转一圈对应的脉冲数*程序周期)
+//float Ratio_Encoder_Righ = 207/(512*0.02);// 右轮速度=counter*右轮周长(mm)/(右轮转一圈对应的脉冲数*程序周期)
 float g_fRealSpeed = 0;		//??????
 float g_fLeftRealSpeed;
 float g_fRighRealSpeed;
 float g_fSpeedFilter = 0;		//??????????
 
-float g_fExpectSpeed = 500;		//???????0.5m/s
+float g_fExpectSpeed = 500;		//期望值（待定）max==3500
 float g_fSpeedError;			//??????
 
 int32 LeftPWM=0, RightPWM=0;  //
@@ -60,7 +60,8 @@ void PWMOut(void)
   
         //if(Flag_Speed == OFF)	g_fSpeedControlOut = 0;	//???Flag_Speed == OFF	 ????????
 	//if(Flag_Direction == OFF)  DirectionOut = 0;	//???Flag_Direction == OFF ?????????		
-
+         
+        //起始的pwm为300
 	DirectionPwm = 0;//调试速度pid
 	LeftPWM = (int32)(300-DirectionPwm+SpeedPwm);  //????PWM==????-???
 	RightPWM = (int32)(300+DirectionPwm+SpeedPwm); 
@@ -68,15 +69,15 @@ void PWMOut(void)
         abs(LeftPWM);//???
         LeftPWM_F = LeftDead + LeftPWM;
         LeftPWM_F = (LeftPWM_F > 950? 950: LeftPWM_F);
-        FTM_PwmDuty(FTM0, FTM_CH0, LeftPWM_F);
-        FTM_PwmDuty(FTM0, FTM_CH1, 0);
+        FTM_PwmDuty(FTM0, FTM_CH0, 0);
+        FTM_PwmDuty(FTM0, FTM_CH1, LeftPWM_F);
             
             
         abs(RightPWM);
         RighPWM_F = RighDead + RightPWM;
         RighPWM_F = (RighPWM_F > 950? 950: RighPWM_F);
-        FTM_PwmDuty(FTM0, FTM_CH2, RighPWM_F);
-        FTM_PwmDuty(FTM0, FTM_CH3, 0);
+        FTM_PwmDuty(FTM0, FTM_CH2, 0);
+        FTM_PwmDuty(FTM0, FTM_CH3, RighPWM_F);
         
         param.LeftPWM_F = LeftPWM_F;
         param.RighPWM_F = RighPWM_F;
@@ -92,15 +93,16 @@ void PWMOut(void)
 --------------------------------------------------------------------------------------------------------*/
 void CalSpeedError(void)
 {
-	static float fSpeedOld = 0, fSpeedNew = 0;
+	static float fSpeedOld = 0;
+        static float fSpeedNew = 0;
         
 	g_nLeftpulse = FTM_ABGet(FTM1);//(GPIO_PinRead(Coder_dir_left) ==1?FTM_ABGet(FTM1):-FTM_ABGet(FTM1));//???????????
 	g_nRighpulse = FTM_ABGet(FTM2);//(GPIO_PinRead(Coder_dir_right)==0?FTM_ABGet(FTM2):-FTM_ABGet(FTM2));//???????????
-	//????????
-	g_fLeftRealSpeed = g_nLeftpulse*Ratio_Encoder_Left;
-	g_fLeftRealSpeed = (g_fLeftRealSpeed>3400?3400:g_fLeftRealSpeed);		//???????????????
-	g_fRighRealSpeed = g_nRighpulse*Ratio_Encoder_Righ;
-	g_fRighRealSpeed = (g_fRighRealSpeed>3400?3400:g_fRighRealSpeed);		//???????????????
+	//不进行速度换算
+	g_fLeftRealSpeed = g_nLeftpulse;//g_nLeftpulse*Ratio_Encoder_Left;
+	g_fLeftRealSpeed = (g_fLeftRealSpeed>2000?2000:g_fLeftRealSpeed);		//???????????????
+	g_fRighRealSpeed = g_nRighpulse;//g_nRighpulse*Ratio_Encoder_Righ;
+	g_fRighRealSpeed = (g_fRighRealSpeed>2000?2000:g_fRighRealSpeed);		//???????????????
 	
 	g_fRealSpeed = (g_fLeftRealSpeed + g_fRighRealSpeed)*0.5;				//??????
 	
@@ -140,11 +142,11 @@ void SpeeedPID_Init()
   s_pid.set =g_fExpectSpeed;
   s_pid.currpwm=0;
   s_pid.pwm_cycle=100;    
-  s_pid.calc_cycle=100;  
+  s_pid.calc_cycle=100; //? 
   s_pid.Td=2000;
   s_pid.Ti=4000;
   s_pid.Kp=5;
-  s_pid.Tsam=20;//20ms???????s_pid
+  s_pid.Tsam=20;//20ms  s_pid
   s_pid.En=0;
   s_pid.En_1=0;
   s_pid.En_2=0;
