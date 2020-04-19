@@ -3,6 +3,7 @@
 
 #include "Speed.h"
 #include "Direction.h"
+#include "ANO_DT.h"
 
 void ParamOut(void);
 
@@ -19,6 +20,8 @@ typedef struct
 }Param;
 
 extern Param param;
+
+void Scope(void);
 
 
 #endif

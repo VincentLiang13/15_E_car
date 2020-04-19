@@ -42,6 +42,8 @@ static void ANO_DT_Send_Check(uint8_t head, uint8_t check_sum)
 /*发送给上位机的数据协议*/
 void ANO_DT_send_int16(short data1, short data2, short data3, short data4, short data5, short data6, short data7, short data8 /*,short data7, short data8, short .....可根据需要自行添加 */)
 {
+//    uint8_t data_to_send[50];	//发送数据缓存  //user add
+  
     uint8_t _cnt=0;
     data_to_send[_cnt++] = 0xAA;      //匿名协议帧头  0xAAAA
 	data_to_send[_cnt++] = 0xAA;

@@ -142,7 +142,7 @@ void SpeeedPID_Init()
   s_pid.set =g_fExpectSpeed;
   s_pid.currpwm=0;
   s_pid.pwm_cycle=100;    
-  s_pid.calc_cycle=100; //? 
+  s_pid.calc_cycle=100; //? no use
   s_pid.Td=2000;
   s_pid.Ti=4000;
   s_pid.Kp=5;

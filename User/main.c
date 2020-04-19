@@ -84,6 +84,7 @@ void main(void)
     //DisableInterrupts;
    // EnableInterrupts; 
     
-    ParamOut();
+    //ParamOut();
 
+    while(1){}
 }

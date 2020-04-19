@@ -4,6 +4,22 @@
 
 Param param;
 
+
+void Scope()//Ð´ÔÚÖÐ¶Ï yes   £¨or main£©
+{
+
+    ANO_DT_send_int16((short)param.g_fExpectSpeed,
+                      (short)param.RighPWM_F,
+                      (short)param.SpeedPwm,
+                      (short)param.g_fSpeedFilter,
+                      0,
+                      0,
+                      0,
+                      0);
+
+}
+
+
 void ParamOut()
 {
   char txt[16];

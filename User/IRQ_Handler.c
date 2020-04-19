@@ -88,9 +88,11 @@ void PIT0_IRQHandler()
     //DirectionPartitionPwmOut();
     SpeedPartitionPwmOut();
     
+    Scope(); 
+    
     PWMOut();
     
-    
+    pidcalcms = 0;
     
 }
 /*---------------------------------------------------------------
@@ -106,6 +108,8 @@ void PIT1_IRQHandler()
     
     //DirectionPartitionPwmOut();
     PWMOut();
+    
+    Scope(); 
     
     pidcalcms++;
 }
